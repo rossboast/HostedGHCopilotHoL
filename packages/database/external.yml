@@ -618,24 +618,6 @@
   tags: java, python, GitHub, copilot, AI, csu
   navigation_levels: 3
 
-- title: GitHub Copilot, your new AI pair programmer - The Ultimate workshop for developers
-  url: https://microsoft.github.io/moaw/workshop/gh:Philess/GHCopilotHoL/main/docs/
-  github_url: https://github.com/Philess/GHCopilotHoL
-  language: en
-  last_updated: 2025-04-03
-  type: workshop
-  description: Discover how to leverage GitHub Copilot to develop your project
-  authors:
-  - Philippe Didiergeorges
-  contacts:
-    - "@philess"
-  duration_minutes: 180
-  audience: students, pro devs
-  level: beginner
-  banner_url: https://raw.githubusercontent.com/philess/GHCopilotHoL/main/assets/banner.jpg
-  tags: JavaScript, .net, GitHub, IA, Copilot, AI, csu
-  navigation_levels: 3
-
 - title: AKS intro for infra teams
   description: This is a workshop for getting started with Azure AKS for the infrastructure teams focusing on infra and network concepts.
   url: https://microsoft.github.io/moaw/workshop/gh:HoussemDellai/aks-intro-for-infra-teams/main/docs/
