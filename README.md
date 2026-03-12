@@ -117,7 +117,15 @@ sed -i "s|'/moaw/'|'/HostedGHCopilotHoL/'|" packages/website/src/public/index.ht
 
 The MOAW `index.html` contains runtime JavaScript that detects `.github.io` domains and overrides the `<base href>` to `/moaw/`. This patch changes it to `/HostedGHCopilotHoL/` so all routes and assets resolve correctly under this repository's GitHub Pages path.
 
-### 6. Add `--base-href` to Angular build
+### 6. Fix 404.html SPA redirect
+
+```bash
+sed -i "s|'/moaw/'|'/HostedGHCopilotHoL/'|" packages/website/src/public/404.html
+```
+
+GitHub Pages serves `404.html` for any path that doesn't match a physical file. The MOAW `404.html` is a standard SPA workaround — it saves the current URL to `sessionStorage` and redirects to the base path, where `index.html` picks it up and restores the route via `history.replaceState`. Without this patch, navigating to any Angular route (e.g. clicking "Browse Workshops") would redirect to `/moaw/` (the upstream MOAW site) instead of `/HostedGHCopilotHoL/`.
+
+### 7. Add `--base-href` to Angular build
 
 ```bash
 sed -i 's|"build": "ng build &&|"build": "ng build --base-href /HostedGHCopilotHoL/ \&\&|' packages/website/package.json
@@ -162,10 +170,11 @@ The workflow runs on:
 
 ## Adapting for a Different Repository Name
 
-If you fork or clone this to a repository with a different name, update the two `sed` patches that reference `HostedGHCopilotHoL`:
+If you fork or clone this to a repository with a different name, update the three `sed` patches that reference `HostedGHCopilotHoL`:
 
 1. In the `index.html` base href patch, change `'/HostedGHCopilotHoL/'` to `'/<your-repo-name>/'`
-2. In the `--base-href` patch, change `/HostedGHCopilotHoL/` to `/<your-repo-name>/`
+2. In the `404.html` SPA redirect patch, change `'/HostedGHCopilotHoL/'` to `'/<your-repo-name>/'`
+3. In the `--base-href` patch, change `/HostedGHCopilotHoL/` to `/<your-repo-name>/`
 
 ## Adapting for Different Workshop Content
 
