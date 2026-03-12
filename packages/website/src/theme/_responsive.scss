@@ -1,0 +1,62 @@
+@import 'variables';
+
+// Responsive helpers --------------------------------------------------------
+
+.show-gt-xs,
+.show-gt-md,
+.show-gt-lg {
+  display: none;
+}
+
+@media (min-width: $breakpoint-xs) {
+  .show-gt-xs {
+    display: initial;
+  }
+
+  .hide-gt-xs {
+    display: none;
+  }
+}
+
+@media (min-width: $breakpoint-md) {
+  .show-gt-md {
+    display: initial;
+  }
+
+  .hide-gt-md {
+    display: none;
+  }
+
+  .split-layout {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-lg);
+
+    > * {
+      flex: 1;
+    }
+  }
+
+  .split-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: var(--space-lg);
+  }
+}
+
+@media (min-width: $breakpoint-lg) {
+  .show-gt-lg {
+    display: initial;
+  }
+
+  .hide-gt-lg {
+    display: none;
+  }
+}
+
+@media screen and (min-height: $breakpoint-v) {
+  // Only support fixed vertical layout when there's enough vertical space
+  .full-viewport {
+    display: flex;
+  }
+}

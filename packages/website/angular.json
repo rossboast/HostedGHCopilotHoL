@@ -1,0 +1,143 @@
+{
+  "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "website": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "inlineTemplate": true,
+          "inlineStyle": true,
+          "standalone": true,
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/website",
+            "index": "src/public/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "tsconfig.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/public",
+                "output": "."
+              },
+              {
+                "glob": "**/*",
+                "input": "../../workshops",
+                "output": "workshops"
+              }
+            ],
+            "styles": [
+              "../../node_modules/prismjs/themes/prism-okaidia.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "../../node_modules/clipboard/dist/clipboard.min.js",
+              "../../node_modules/marked/marked.min.js",
+              "../../node_modules/prismjs/prism.js",
+              "../../node_modules/prismjs/components/prism-javascript.min.js",
+              "../../node_modules/prismjs/components/prism-typescript.min.js",
+              "../../node_modules/prismjs/components/prism-java.min.js",
+              "../../node_modules/prismjs/components/prism-json.min.js",
+              "../../node_modules/prismjs/components/prism-bash.min.js",
+              "../../node_modules/prismjs/components/prism-csharp.min.js",
+              "../../node_modules/prismjs/components/prism-yaml.min.js",
+              "../../node_modules/prismjs/components/prism-python.min.js",
+              "../../node_modules/prismjs/components/prism-docker.min.js",
+              "../../node_modules/prismjs/components/prism-bicep.min.js",
+              "../../node_modules/prismjs/components/prism-sql.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "@primer/octicons"
+           ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "website:build:production"
+            },
+            "development": {
+              "buildTarget": "website:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "website:build"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}
