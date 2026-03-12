@@ -95,6 +95,7 @@ jobs:
 
           # Fix base href for this repo (upstream hardcodes /moaw/ for github.io)
           sed -i "s|'/moaw/'|'/HostedGHCopilotHoL/'|" packages/website/src/public/index.html
+          sed -i "s|'/moaw/'|'/HostedGHCopilotHoL/'|" packages/website/src/public/404.html
 
           # Add --base-href to the website build script
           sed -i 's|"build": "ng build &&|"build": "ng build --base-href /HostedGHCopilotHoL/ \&\&|' packages/website/package.json
