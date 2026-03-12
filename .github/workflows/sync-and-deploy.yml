@@ -1,0 +1,134 @@
+name: Sync and Deploy Workshop
+
+env:
+  UPSTREAM_REPOSITORY: Philess/GHCopilotHoL
+  ENGINE_REPOSITORY: microsoft/moaw
+  CONTENT_SOURCE_PATH: docs
+  TARGET_WORKSHOP_PATH: workshops/github-copilot
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: sync-and-deploy
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Checkout MOAW engine source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.ENGINE_REPOSITORY }}
+          ref: main
+          path: .sources/moaw
+          sparse-checkout: |
+            package.json
+            package-lock.json
+            packages
+          sparse-checkout-cone-mode: true
+
+      - name: Checkout workshop content source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.UPSTREAM_REPOSITORY }}
+          ref: main
+          path: .sources/content
+          sparse-checkout: |
+            docs
+          sparse-checkout-cone-mode: true
+
+      - name: Assemble site content
+        run: |
+          set -euo pipefail
+
+          docs_source=".sources/content/${CONTENT_SOURCE_PATH}"
+          moaw_source=".sources/moaw"
+
+          if [ ! -d "$docs_source" ]; then
+            echo "Missing docs source at $docs_source"
+            exit 1
+          fi
+
+          # Copy MOAW engine packages
+          rm -rf packages
+          cp -R "$moaw_source/packages" ./packages
+          cp "$moaw_source/package.json" ./package.json
+          cp "$moaw_source/package-lock.json" ./package-lock.json
+
+          # Copy workshop content
+          rm -rf "$TARGET_WORKSHOP_PATH"
+          mkdir -p "$TARGET_WORKSHOP_PATH"
+          shopt -s dotglob nullglob
+          cp -R "$docs_source"/* "$TARGET_WORKSHOP_PATH"/
+          shopt -u dotglob nullglob
+
+          # Clean up sources
+          rm -rf .sources
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: sync content from upstream"
+            git push
+          fi
+
+  deploy-pages:
+    name: Build and Deploy
+    needs: sync
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create workshop database
+        run: npm run create:db
+        env:
+          GITHUB_REPO_URL: ${{ github.event.repository.html_url }}
+
+      - name: Build website
+        run: npm run build:website
+        env:
+          SEARCH_URL: ${{ secrets.SEARCH_URL }}
+          BASE_HREF: /HostedGHCopilotHoL/
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/website/dist/website
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
