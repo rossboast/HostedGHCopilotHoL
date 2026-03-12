@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run update:env -s",
+    "build": "ng build --base-href /HostedGHCopilotHoL/ && npm run update:env -s",
     "build:root": "ng build --base-href '/' && npm run update:env -s",
     "watch": "ng build --watch --configuration development",
     "format": "prettier --write '(src|scripts)/**/*.{ts,json,scss}'",
