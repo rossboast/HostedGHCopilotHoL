@@ -5,6 +5,7 @@ env:
   ENGINE_REPOSITORY: microsoft/moaw
   CONTENT_SOURCE_PATH: docs
   TARGET_WORKSHOP_PATH: workshops/github-copilot
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   workflow_dispatch:
@@ -134,4 +135,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Latest major version; no v5 yet
+        uses: actions/deploy-pages@v4

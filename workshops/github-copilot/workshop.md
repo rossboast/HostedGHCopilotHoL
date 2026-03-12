@@ -1,5 +1,5 @@
 ---
-published: false # Optional. Set to true to publish the workshop (default: false)
+published: true # Optional. Set to true to publish the workshop (default: false)
 type: workshop # Required.
 title: Product Hands-on Lab - GitHub Copilot, your new AI pair programmer # Required. Full title of the workshop
 short_title: GitHub Copilot, your new AI pair programmer # Optional. Short title displayed in the header
@@ -28,12 +28,6 @@ navigation_numbering: false # Optional. Enable numbering in the side menu (defau
 #   - Section 1 title
 #   - Section 2 title
 ---
-
-<div class="info" data-title="Language | Idioma">
-
-> 🇬🇧 English (current) | [🇪🇸 Español](https://moaw.dev/workshop/gh:Philess/GHCopilotHoL/main/docs/translations/workshop.es.md)
-
-</div>
 
 # The ultimate GitHub Copilot Tutorial for developers
 
