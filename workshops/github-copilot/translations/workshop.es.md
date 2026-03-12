@@ -29,7 +29,7 @@ navigation_numbering: false # Opcional. Habilitar numeración en el menú latera
 
 <div class="info" data-title="🌐 Language / Idioma">
 
-> [🇬🇧 English](https://moaw.dev/workshop/gh:Philess/GHCopilotHoL/main/docs/) | **Español** (actual)
+> [🇬🇧 English](../) | **Español** (actual)
 
 </div>
 

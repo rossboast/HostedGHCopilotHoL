@@ -77,6 +77,22 @@ jobs:
           # Clean up sources
           rm -rf .sources
 
+          # Patch workshop to serve locally instead of via external MOAW
+          workshop_file="$TARGET_WORKSHOP_PATH/workshop.md"
+          if [ -f "$workshop_file" ]; then
+            sed -i 's/^published: false/published: true/' "$workshop_file"
+            sed -i '/moaw\.dev\/workshop\/gh:Philess\/GHCopilotHoL/d' "$workshop_file"
+          fi
+
+          # Patch Spanish translation to use relative link
+          es_file="$TARGET_WORKSHOP_PATH/translations/workshop.es.md"
+          if [ -f "$es_file" ]; then
+            sed -i 's|https://moaw\.dev/workshop/gh:Philess/GHCopilotHoL/main/docs/|../|g' "$es_file"
+          fi
+
+          # Remove external entry that points to remote MOAW workshop
+          sed -i '/^- title: GitHub Copilot, your new AI pair programmer - The Ultimate workshop/,/^$/d' packages/database/external.yml
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
