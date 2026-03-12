@@ -93,6 +93,12 @@ jobs:
           # Remove external entry that points to remote MOAW workshop
           sed -i '/^- title: GitHub Copilot, your new AI pair programmer - The Ultimate workshop/,/^$/d' packages/database/external.yml
 
+          # Fix base href for this repo (upstream hardcodes /moaw/ for github.io)
+          sed -i "s|'/moaw/'|'/HostedGHCopilotHoL/'|" packages/website/src/public/index.html
+
+          # Add --base-href to the website build script
+          sed -i 's|"build": "ng build &&|"build": "ng build --base-href /HostedGHCopilotHoL/ \&\&|' packages/website/package.json
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
@@ -137,29 +143,14 @@ jobs:
 
       - name: Build website
         run: npm run build:website
-        env:
-          SEARCH_URL: ${{ secrets.SEARCH_URL }}
-          BASE_HREF: /HostedGHCopilotHoL/
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Archive Pages artifact
-        run: |
-          tar \
-            --dereference --hard-dereference \
-            --directory packages/website/dist/website \
-            -cvf "$RUNNER_TEMP/artifact.tar" \
-            --exclude=.git \
-            --exclude=.github \
-            .
-
       - name: Upload artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: ${{ runner.temp }}/artifact.tar
-          retention-days: 1
+          path: packages/website/dist/website
 
       - name: Deploy to GitHub Pages
         id: deployment
