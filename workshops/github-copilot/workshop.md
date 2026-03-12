@@ -29,6 +29,11 @@ navigation_numbering: false # Optional. Enable numbering in the side menu (defau
 #   - Section 2 title
 ---
 
+<div class="info" data-title="Language | Idioma">
+
+
+</div>
+
 # The ultimate GitHub Copilot Tutorial for developers
 
 *Version 1.5 - March 2026*
